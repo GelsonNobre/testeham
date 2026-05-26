@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ham Repeater</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0e14;
+    --bg2: #0f1520;
+    --bg3: #141c2a;
+    --accent: #00d4aa;
+    --accent2: #0099ff;
+    --accent3: #ff6b35;
+    --text: #e8f0fe;
+    --text2: #8899aa;
+    --text3: #4a5568;
+    --border: rgba(0,212,170,0.15);
+    --border2: rgba(0,153,255,0.2);
+    --glow: 0 0 20px rgba(0,212,170,0.3);
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-display: 'Rajdhani', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,14,20,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--text); }
+
+  .logo-icon {
+    width: 32px; height: 32px;
+    border: 2px solid var(--accent);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .lang-switcher {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .lang-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .lang-btn.active, .lang-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,212,170,0.08);
+  }
+
+  .nav-cta {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .nav-cta:hover { background: #00eec0; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    padding: 120px 2rem 80px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 70% 40%, rgba(0,153,255,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 20% 60%, rgba(0,212,170,0.06) 0%, transparent 50%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,170,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,170,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
+  }
+
+  .hero-waves {
+    position: absolute;
+    right: -100px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.15;
+  }
+
+  .wave-ring {
+    position: absolute;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse-ring 3s ease-out infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% { opacity: 1; transform: translate(-50%, -50%) scale(0.5); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+  }
+
+  .hero-content {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+  }
+
+  .badge-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: 3px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title .line1 { color: var(--text); display: block; }
+
+  .hero-title .line2 {
+    color: var(--accent);
+    display: block;
+    text-shadow: 0 0 40px rgba(0,212,170,0.4);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--text2);
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary:hover { background: #00eec0; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,212,170,0.3); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .hero-stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: var(--font-mono);
+    font-size: 1.8rem;
+    color: var(--accent);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--text3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* MOCKUP / HERO VISUAL */
+  .hero-visual {
+    position: relative;
+  }
+
+  .screen-mock {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(0,212,170,0.1);
+  }
+
+  .screen-bar {
+    background: var(--bg3);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #febc2e; }
+  .dot.g { background: #28c840; }
+
+  .screen-url {
+    flex: 1;
+    background: rgba(0,0,0,0.3);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text3);
+    margin-left: 8px;
+  }
+
+  .screen-content {
+    padding: 20px;
+  }
+
+  .mock-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .mock-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  .mock-badge {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent);
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+
+  .mock-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+  }
+
+  .mock-table th {
+    color: var(--text3);
+    text-align: left;
+    padding: 6px 8px;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mock-table td {
+    padding: 8px;
+    color: var(--text2);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+
+  .mock-table tr:hover td { background: rgba(0,212,170,0.04); }
+
+  .call-sign {
+    color: var(--accent);
+    font-weight: bold;
+  }
+
+  .status-on {
+    color: #28c840;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .status-off {
+    color: var(--text3);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .status-dot { width: 5px; height: 5px; border-radius: 50%; }
+  .status-dot.on { background: #28c840; }
+  .status-dot.off { background: var(--text3); }
+
+  .flag { font-size: 1rem; }
+
+  /* SECTION SHARED */
+  section { padding: 100px 2rem; }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+  }
+
+  .section-desc {
+    color: var(--text2);
+    font-size: 1rem;
+    max-width: 560px;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  /* FEATURES */
+  .features-bg { background: var(--bg2); }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .feature-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .feature-card:hover { border-color: rgba(0,212,170,0.4); transform: translateY(-4px); }
+  .feature-card:hover::before { opacity: 1; }
+
+  .feature-icon {
+    width: 48px; height: 48px;
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: var(--accent);
+    margin-bottom: 1.25rem;
+  }
+
+  .feature-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-desc {
+    font-size: 0.875rem;
+    color: var(--text2);
+    line-height: 1.7;
+  }
+
+  /* COUNTRIES */
+  .countries-section { background: var(--bg); }
+
+  .countries-row {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .country-card {
+    flex: 1;
+    min-width: 200px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .country-card:hover { border-color: var(--accent2); transform: translateY(-4px); }
+
+  .country-flag { font-size: 3.5rem; margin-bottom: 1rem; display: block; }
+
+  .country-name {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 0.25rem;
+  }
+
+  .country-lang {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text3);
+    letter-spacing: 1px;
+  }
+
+  /* CALLSIGN */
+  .callsign-section { background: var(--bg2); }
+
+  .callsign-demo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 2rem;
+  }
+
+  .callsign-badge {
+    background: rgba(0,153,255,0.1);
+    border: 1px solid rgba(0,153,255,0.3);
+    color: var(--accent2);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 6px;
+    letter-spacing: 2px;
+  }
+
+  .callsign-badge.primary {
+    background: rgba(0,212,170,0.12);
+    border-color: rgba(0,212,170,0.4);
+    color: var(--accent);
+    font-size: 1.2rem;
+  }
+
+  /* NOTIFICATIONS */
+  .tg-card {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 380px;
+    position: relative;
+    margin-top: 2rem;
+  }
+
+  .tg-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .tg-avatar {
+    width: 44px; height: 44px;
+    background: #229ED9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+  }
+
+  .tg-name { font-weight: 600; font-size: 0.9rem; }
+  .tg-sub { font-size: 0.75rem; color: var(--text3); }
+
+  .tg-msg {
+    background: #229ED9;
+    border-radius: 12px 12px 12px 2px;
+    padding: 12px 16px;
+    font-size: 0.82rem;
+    color: white;
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+
+  .tg-msg .alert { color: #ffd700; font-weight: 600; }
+
+  /* MAP SECTION */
+  .map-section { background: var(--bg); }
+
+  .map-mock {
+    background: #0d1b2e;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    height: 320px;
+    margin-top: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .map-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,153,255,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,153,255,0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .map-dot {
+    position: absolute;
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+  }
+
+  .map-dot::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: ping 2s ease-out infinite;
+  }
+
+  @keyframes ping {
+    0% { transform: scale(1); opacity: 0.4; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  .map-label {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--accent);
+    white-space: nowrap;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* HOW IT WORKS */
+  .how-section { background: var(--bg2); }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+    position: relative;
+  }
+
+  .step {
+    text-align: center;
+    position: relative;
+  }
+
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 3rem;
+    color: rgba(0,212,170,0.12);
+    font-weight: bold;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .step-icon {
+    width: 56px; height: 56px;
+    background: rgba(0,212,170,0.08);
+    border: 1px solid rgba(0,212,170,0.25);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin: 0 auto 1rem;
+  }
+
+  .step-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+  }
+
+  .step-desc { font-size: 0.82rem; color: var(--text2); line-height: 1.6; }
+
+  /* CTA */
+  .cta-section {
+    background: var(--bg);
+    text-align: center;
+    padding: 120px 2rem;
+  }
+
+  .cta-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-title span { color: var(--accent); }
+
+  .cta-sub { color: var(--text2); margin-bottom: 2.5rem; font-size: 1rem; }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem;
+  }
+
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: gap;
+    gap: 1rem;
+  }
+
+  .footer-copy {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text3);
+    letter-spacing: 1px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .footer-links a {
+    font-size: 0.8rem;
+    color: var(--text3);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--accent); }
+
+  /* HAMBURGER */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    background: none;
+    border: none;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text2);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 64px; left: 0; right: 0;
+    background: rgba(10,14,20,0.98);
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+    z-index: 99;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .mobile-menu.open { display: flex; }
+
+  .mobile-menu a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 1rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.2s;
+  }
+
+  .mobile-menu a:hover { color: var(--accent); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-cta.desktop { display: none; }
+    .hamburger { display: flex; }
+
+    .hero { padding: 100px 1.25rem 60px; min-height: auto; }
+    .hero-content { grid-template-columns: 1fr; gap: 2.5rem; }
+    .hero-visual { order: -1; }
+    .hero-title { font-size: 2.4rem; }
+    .hero-sub { font-size: 0.95rem; }
+    .hero-stats { gap: 1.5rem; }
+    .stat-num { font-size: 1.4rem; }
+
+    section { padding: 60px 1.25rem; }
+
+    .features-grid { grid-template-columns: 1fr; }
+
+    .countries-row { flex-direction: column; }
+    .country-card { width: 100%; }
+
+    .steps { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+    .cta-section { padding: 80px 1.25rem; }
+
+    .footer-inner { flex-direction: column; text-align: center; }
+
+    .lang-switcher { gap: 4px; }
+    .lang-btn { font-size: 0.65rem; padding: 3px 6px; }
+  }
+
+  @media (max-width: 480px) {
+    .steps { grid-template-columns: 1fr; }
+    .hero-actions { flex-direction: column; }
+    .btn-primary, .btn-secondary { text-align: center; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="logo-icon">HR</div>
+    HAM <span>REPEATER</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#features" data-i18n="nav_features">Recursos</a></li>
+    <li><a href="#how" data-i18n="nav_how">Como Funciona</a></li>
+    <li><a href="#map" data-i18n="nav_map">Cobertura</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="setLang('pt')" title="Português">🇧🇷 PT</button>
+      <button class="lang-btn" onclick="setLang('en')" title="English">🇺🇸 EN</button>
+      <button class="lang-btn" onclick="setLang('es')" title="Español">🇪🇸 ES</button>
+    </div>
+    <a href="#" class="nav-cta desktop" data-i18n="nav_cta">Acessar</a>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#features" onclick="toggleMenu()" data-i18n="nav_features">Recursos</a>
+  <a href="#how" onclick="toggleMenu()" data-i18n="nav_how">Como Funciona</a>
+  <a href="#map" onclick="toggleMenu()" data-i18n="nav_map">Cobertura</a>
+  <a href="#" class="nav-cta" style="text-align:center;" data-i18n="nav_cta">Acessar</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div style="position:absolute;right:0;top:0;bottom:0;width:50%;pointer-events:none;overflow:hidden;">
+    <div style="position:absolute;right:-200px;top:50%;transform:translateY(-50%);">
+      <div class="wave-ring" style="width:600px;height:600px;animation-delay:0s;"></div>
+      <div class="wave-ring" style="width:600px;height:600px;animation-delay:1s;"></div>
+      <div class="wave-ring" style="width:600px;height:600px;animation-delay:2s;"></div>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div>
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span data-i18n="hero_badge">SISTEMA GLOBAL DE REPETIDORAS</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="line1">HAM</span>
+        <span class="line2">REPEATER</span>
+      </h1>
+      <p class="hero-sub" data-i18n="hero_sub">Cadastre, gerencie e monitore repetidoras de rádio amador no Brasil e no mundo. Acompanhe o status em tempo real, receba alertas no Telegram e conecte-se com a comunidade global.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">
+          <i class="ti ti-antenna" aria-hidden="true"></i>
+          <span data-i18n="hero_cta1">Começar Agora</span>
+        </a>
+        <a href="#how" class="btn-secondary">
+          <i class="ti ti-info-circle" aria-hidden="true"></i>
+          <span data-i18n="hero_cta2">Saiba Mais</span>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="stat-num">3.200+</span>
+          <span class="stat-label" data-i18n="stat1">Repetidoras</span>
+        </div>
+        <div class="hero-stat">
+          <span class="stat-num">47</span>
+          <span class="stat-label" data-i18n="stat2">Países</span>
+        </div>
+        <div class="hero-stat">
+          <span class="stat-num">12k+</span>
+          <span class="stat-label" data-i18n="stat3">Usuários</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="screen-mock">
+        <div class="screen-bar">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <div class="screen-url">hamrepeater.app/repeaters</div>
+        </div>
+        <div class="screen-content">
+          <div class="mock-header">
+            <span class="mock-title">REPETIDORAS ATIVAS</span>
+            <span class="mock-badge">LIVE</span>
+          </div>
+          <table class="mock-table">
+            <thead>
+              <tr>
+                <th>INDICATIVO</th>
+                <th>FREQ</th>
+                <th>LOCAL</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="call-sign">PT2AA</span></td>
+                <td>145.000</td>
+                <td><span class="flag">🇧🇷</span> Brasília</td>
+                <td><span class="status-on"><div class="status-dot on"></div>ON</span></td>
+              </tr>
+              <tr>
+                <td><span class="call-sign">EA4RCT</span></td>
+                <td>438.725</td>
+                <td><span class="flag">🇪🇸</span> Madrid</td>
+                <td><span class="status-on"><div class="status-dot on"></div>ON</span></td>
+              </tr>
+              <tr>
+                <td><span class="call-sign">W6KRG</span></td>
+                <td>146.220</td>
+                <td><span class="flag">🇺🇸</span> Los Angeles</td>
+                <td><span class="status-off"><div class="status-dot off"></div>OFF</span></td>
+              </tr>
+              <tr>
+                <td><span class="call-sign">PY2RCA</span></td>
+                <td>439.500</td>
+                <td><span class="flag">🇧🇷</span> São Paulo</td>
+                <td><span class="status-on"><div class="status-dot on"></div>ON</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:14px;display:flex;gap:8px;">
+            <div style="flex:1;background:rgba(0,212,170,0.08);border:1px solid rgba(0,212,170,0.2);border-radius:6px;padding:8px;text-align:center;">
+              <div style="font-family:var(--font-mono);font-size:1rem;color:var(--accent);">3</div>
+              <div style="font-size:0.6rem;color:var(--text3);letter-spacing:1px;">ONLINE</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:8px;text-align:center;">
+              <div style="font-family:var(--font-mono);font-size:1rem;color:var(--text3);">1</div>
+              <div style="font-size:0.6rem;color:var(--text3);letter-spacing:1px;">OFFLINE</div>
+            </div>
+            <div style="flex:2;background:rgba(0,153,255,0.06);border:1px solid rgba(0,153,255,0.15);border-radius:6px;padding:8px;display:flex;align-items:center;justify-content:center;gap:6px;">
+              <i class="ti ti-star" style="color:#229ED9;font-size:0.9rem;" aria-hidden="true"></i>
+              <span style="font-size:0.65rem;color:var(--text3);letter-spacing:0.5px;" data-i18n="mock_fav">2 FAVORITAS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-bg" id="features">
+  <div class="section-inner">
+    <p class="section-label" data-i18n="feat_label">RECURSOS</p>
+    <h2 class="section-title" data-i18n="feat_title">Tudo que você precisa para gerenciar repetidoras</h2>
+    <p class="section-desc" data-i18n="feat_desc">Uma plataforma completa para radioamadores cadastrarem, monitorarem e compartilharem repetidoras em qualquer parte do mundo.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="ti ti-antenna" aria-hidden="true"></i></div>
+        <h3 class="feature-title" data-i18n="f1_title">Cadastro de Repetidoras</h3>
+        <p class="feature-desc" data-i18n="f1_desc">Cadastre repetidoras com todas as informações técnicas: frequência, CTCSS, localização, modo de operação e muito mais.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="ti ti-radio" aria-hidden="true"></i></div>
+        <h3 class="feature-title" data-i18n="f2_title">Múltiplos Indicativos</h3>
+        <p class="feature-desc" data-i18n="f2_desc">Vincule mais de um indicativo de chamada à mesma repetidora. Ex: PT2AA, PY2RCA no mesmo sistema.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(0,153,255,0.1);border-color:rgba(0,153,255,0.2);color:var(--accent2);"><i class="ti ti-map-pin" aria-hidden="true"></i></div>
+        <h3 class="feature-title" data-i18n="f3_title">Localização no Mapa</h3>
+        <p class="feature-desc" data-i18n="f3_desc">Veja a localização exata de cada repetidora no Google Maps, com coordenadas precisas e raio de cobertura.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(34,158,217,0.1);border-color:rgba(34,158,217,0.2);color:#229ED9;"><i class="ti ti-brand-telegram" aria-hidden="true"></i></div>
+        <h3 class="feature-title" data-i18n="f4_title">Alertas via Telegram</h3>
+        <p class="feature-desc" data-i18n="f4_desc">Cadastre seu telefone e receba notificações instantâneas no Telegram sempre que uma repetidora favorita mudar de status.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(255,107,53,0.1);border-color:rgba(255,107,53,0.2);color:var(--accent3);"><i class="ti ti-star" aria-hidden="true"></i></div>
+        <h3 class="feature-title" data-i18n="f5_title">Repetidoras Favoritas</h3>
+        <p class="feature-desc" data-i18n="f5_desc">Marque suas repetidoras mais utilizadas como favoritas e acesse-as rapidamente no seu painel personalizado.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="ti ti-refresh" aria-hidden="true"></i></div>
+        <h3 class="feature-title" data-i18n="f6_title">Status em Tempo Real</h3>
+        <p class="feature-desc" data-i18n="f6_desc">Atualize e consulte o status operacional de repetidoras. Online, offline ou em manutenção — sempre atualizado pela comunidade.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTRIES -->
+<section class="countries-section">
+  <div class="section-inner">
+    <p class="section-label" data-i18n="cov_label">COBERTURA GLOBAL</p>
+    <h2 class="section-title" data-i18n="cov_title">Disponível em 3 idiomas</h2>
+    <p class="section-desc" data-i18n="cov_desc">A plataforma está disponível em Português, Inglês e Espanhol para atender radioamadores do Brasil, Estados Unidos, Espanha e toda a América Latina.</p>
+    <div class="countries-row">
+      <div class="country-card">
+        <span class="country-flag">🇧🇷</span>
+        <div class="country-name">Brasil</div>
+        <div class="country-lang">PORTUGUÊS</div>
+      </div>
+      <div class="country-card">
+        <span class="country-flag">🇺🇸</span>
+        <div class="country-name">United States</div>
+        <div class="country-lang">ENGLISH</div>
+      </div>
+      <div class="country-card">
+        <span class="country-flag">🇪🇸</span>
+        <div class="country-name">España</div>
+        <div class="country-lang">ESPAÑOL</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TELEGRAM -->
+<section style="background:var(--bg2);padding:100px 2rem;">
+  <div class="section-inner" style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;">
+    <div>
+      <p class="section-label" data-i18n="tg_label">NOTIFICAÇÕES</p>
+      <h2 class="section-title" data-i18n="tg_title">Alertas instantâneos no Telegram</h2>
+      <p class="section-desc" data-i18n="tg_desc">Nunca perca uma alteração de status. Cadastre seu número de telefone e nosso bot do Telegram te avisa em segundos quando qualquer repetidora favorita sair do ar ou voltar a operar.</p>
+    </div>
+    <div>
+      <div class="tg-card">
+        <div class="tg-header">
+          <div class="tg-avatar"><i class="ti ti-brand-telegram" aria-hidden="true"></i></div>
+          <div>
+            <div class="tg-name">Ham Repeater Bot</div>
+            <div class="tg-sub" data-i18n="tg_bot_sub">bot · agora</div>
+          </div>
+        </div>
+        <div class="tg-msg">
+          <div class="alert" data-i18n="tg_alert">⚠️ ALERTA DE STATUS</div>
+          <div style="margin-top:6px;" data-i18n="tg_msg1">A repetidora <strong>PT2AA</strong> em Brasília, Brasil está <strong>OFFLINE</strong>.</div>
+          <div style="margin-top:4px;font-size:0.75rem;opacity:0.8;" data-i18n="tg_msg2">Frequência: 145.000 MHz · 14:32</div>
+        </div>
+        <div style="font-size:0.75rem;color:var(--text3);text-align:right;font-family:var(--font-mono);" data-i18n="tg_read">lido ✓✓</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP SECTION -->
+<section class="map-section" id="map">
+  <div class="section-inner">
+    <p class="section-label" data-i18n="map_label">COBERTURA</p>
+    <h2 class="section-title" data-i18n="map_title">Repetidoras em todo o mundo</h2>
+    <p class="section-desc" data-i18n="map_desc">Visualize no mapa a localização exata de cada repetidora cadastrada. Filtre por país, frequência ou status operacional.</p>
+    <div class="map-mock">
+      <div class="map-grid"></div>
+      <div class="map-dot" style="top:55%;left:35%;"><div class="map-label">PT2AA</div></div>
+      <div class="map-dot" style="top:50%;left:47%;animation-delay:0.5s;background:var(--accent2);box-shadow:0 0 12px var(--accent2);"><div class="map-label" style="color:var(--accent2);">EA4RCT</div></div>
+      <div class="map-dot" style="top:42%;left:22%;animation-delay:1s;"><div class="map-label">W6KRG</div></div>
+      <div class="map-dot" style="top:58%;left:39%;animation-delay:1.5s;"><div class="map-label">PY2RCA</div></div>
+      <div class="map-dot" style="top:48%;left:52%;animation-delay:0.8s;background:var(--accent2);box-shadow:0 0 12px var(--accent2);"><div class="map-label" style="color:var(--accent2);">EB5AG</div></div>
+      <div style="position:absolute;bottom:16px;right:16px;font-family:var(--font-mono);font-size:0.65rem;color:var(--text3);background:rgba(0,0,0,0.6);padding:6px 12px;border-radius:4px;letter-spacing:1px;" data-i18n="map_powered">GOOGLE MAPS INTEGRADO</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="section-inner">
+    <p class="section-label" data-i18n="how_label">COMO FUNCIONA</p>
+    <h2 class="section-title" data-i18n="how_title">Em 4 passos simples</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon"><i class="ti ti-user-plus" aria-hidden="true"></i></div>
+        <h3 class="step-title" data-i18n="s1_title">Crie sua conta</h3>
+        <p class="step-desc" data-i18n="s1_desc">Cadastre-se gratuitamente e configure seu perfil de radioamador.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon"><i class="ti ti-plus" aria-hidden="true"></i></div>
+        <h3 class="step-title" data-i18n="s2_title">Adicione repetidoras</h3>
+        <p class="step-desc" data-i18n="s2_desc">Cadastre repetidoras com indicativos, frequências e localização.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon"><i class="ti ti-star" aria-hidden="true"></i></div>
+        <h3 class="step-title" data-i18n="s3_title">Favorite as suas</h3>
+        <p class="step-desc" data-i18n="s3_desc">Marque as repetidoras que você usa frequentemente para acesso rápido.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-icon" style="color:#229ED9;background:rgba(34,158,217,0.1);border-color:rgba(34,158,217,0.2);"><i class="ti ti-brand-telegram" aria-hidden="true"></i></div>
+        <h3 class="step-title" data-i18n="s4_title">Ative os alertas</h3>
+        <p class="step-desc" data-i18n="s4_desc">Vincule seu Telegram e receba notificações de status em tempo real.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="hero-badge" style="justify-content:center;display:inline-flex;">
+      <div class="badge-dot"></div>
+      <span data-i18n="cta_badge">ACESSO GRATUITO</span>
+    </div>
+    <h2 class="cta-title">
+      <span data-i18n="cta_title1">Pronto para conectar</span><br>
+      <span data-i18n="cta_title2">ao mundo?</span>
+    </h2>
+    <p class="cta-sub" data-i18n="cta_sub">Junte-se a milhares de radioamadores que já usam o Ham Repeater para gerenciar e monitorar repetidoras globalmente.</p>
+    <a href="#" class="btn-primary" style="font-size:1.1rem;padding:16px 40px;">
+      <i class="ti ti-antenna" aria-hidden="true"></i>
+      <span data-i18n="cta_btn">Criar Conta Grátis</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="nav-logo" style="text-decoration:none;">
+      <div class="logo-icon">HR</div>
+      HAM <span style="color:var(--text);">REPEATER</span>
+    </div>
+    <div class="footer-links">
+      <a href="#" data-i18n="ft_privacy">Privacidade</a>
+      <a href="#" data-i18n="ft_terms">Termos</a>
+      <a href="#" data-i18n="ft_contact">Contato</a>
+    </div>
+    <div class="footer-copy">© 2025 HAM REPEATER · 73 de todos</div>
+  </div>
+</footer>
+
+<script>
+  const i18n = {
+    pt: {
+      nav_features: 'Recursos', nav_how: 'Como Funciona', nav_map: 'Cobertura', nav_cta: 'Acessar',
+      hero_badge: 'SISTEMA GLOBAL DE REPETIDORAS',
+      hero_sub: 'Cadastre, gerencie e monitore repetidoras de rádio amador no Brasil e no mundo. Acompanhe o status em tempo real, receba alertas no Telegram e conecte-se com a comunidade global.',
+      hero_cta1: 'Começar Agora', hero_cta2: 'Saiba Mais',
+      stat1: 'Repetidoras', stat2: 'Países', stat3: 'Usuários',
+      mock_fav: '2 FAVORITAS',
+      feat_label: 'RECURSOS', feat_title: 'Tudo que você precisa para gerenciar repetidoras',
+      feat_desc: 'Uma plataforma completa para radioamadores cadastrarem, monitorarem e compartilharem repetidoras em qualquer parte do mundo.',
+      f1_title: 'Cadastro de Repetidoras', f1_desc: 'Cadastre repetidoras com todas as informações técnicas: frequência, CTCSS, localização, modo de operação e muito mais.',
+      f2_title: 'Múltiplos Indicativos', f2_desc: 'Vincule mais de um indicativo de chamada à mesma repetidora. Ex: PT2AA, PY2RCA no mesmo sistema.',
+      f3_title: 'Localização no Mapa', f3_desc: 'Veja a localização exata de cada repetidora no Google Maps, com coordenadas precisas e raio de cobertura.',
+      f4_title: 'Alertas via Telegram', f4_desc: 'Cadastre seu telefone e receba notificações instantâneas no Telegram sempre que uma repetidora favorita mudar de status.',
+      f5_title: 'Repetidoras Favoritas', f5_desc: 'Marque suas repetidoras mais utilizadas como favoritas e acesse-as rapidamente no seu painel personalizado.',
+      f6_title: 'Status em Tempo Real', f6_desc: 'Atualize e consulte o status operacional de repetidoras. Online, offline ou em manutenção — sempre atualizado pela comunidade.',
+      cov_label: 'COBERTURA GLOBAL', cov_title: 'Disponível em 3 idiomas',
+      cov_desc: 'A plataforma está disponível em Português, Inglês e Espanhol para atender radioamadores do Brasil, Estados Unidos, Espanha e toda a América Latina.',
+      tg_label: 'NOTIFICAÇÕES', tg_title: 'Alertas instantâneos no Telegram',
+      tg_desc: 'Nunca perca uma alteração de status. Cadastre seu número de telefone e nosso bot do Telegram te avisa em segundos quando qualquer repetidora favorita sair do ar ou voltar a operar.',
+      tg_bot_sub: 'bot · agora', tg_alert: '⚠️ ALERTA DE STATUS',
+      tg_msg1: 'A repetidora <strong>PT2AA</strong> em Brasília, Brasil está <strong>OFFLINE</strong>.',
+      tg_msg2: 'Frequência: 145.000 MHz · 14:32', tg_read: 'lido ✓✓',
+      map_label: 'COBERTURA', map_title: 'Repetidoras em todo o mundo',
+      map_desc: 'Visualize no mapa a localização exata de cada repetidora cadastrada. Filtre por país, frequência ou status operacional.',
+      map_powered: 'GOOGLE MAPS INTEGRADO',
+      how_label: 'COMO FUNCIONA', how_title: 'Em 4 passos simples',
+      s1_title: 'Crie sua conta', s1_desc: 'Cadastre-se gratuitamente e configure seu perfil de radioamador.',
+      s2_title: 'Adicione repetidoras', s2_desc: 'Cadastre repetidoras com indicativos, frequências e localização.',
+      s3_title: 'Favorite as suas', s3_desc: 'Marque as repetidoras que você usa frequentemente para acesso rápido.',
+      s4_title: 'Ative os alertas', s4_desc: 'Vincule seu Telegram e receba notificações de status em tempo real.',
+      cta_badge: 'ACESSO GRATUITO', cta_title1: 'Pronto para conectar', cta_title2: 'ao mundo?',
+      cta_sub: 'Junte-se a milhares de radioamadores que já usam o Ham Repeater para gerenciar e monitorar repetidoras globalmente.',
+      cta_btn: 'Criar Conta Grátis',
+      ft_privacy: 'Privacidade', ft_terms: 'Termos', ft_contact: 'Contato',
+    },
+    en: {
+      nav_features: 'Features', nav_how: 'How It Works', nav_map: 'Coverage', nav_cta: 'Sign In',
+      hero_badge: 'GLOBAL REPEATER SYSTEM',
+      hero_sub: 'Register, manage and monitor amateur radio repeaters in Brazil and worldwide. Track status in real time, receive Telegram alerts and connect with the global community.',
+      hero_cta1: 'Get Started', hero_cta2: 'Learn More',
+      stat1: 'Repeaters', stat2: 'Countries', stat3: 'Users',
+      mock_fav: '2 FAVORITES',
+      feat_label: 'FEATURES', feat_title: 'Everything you need to manage repeaters',
+      feat_desc: 'A complete platform for amateur radio operators to register, monitor and share repeaters anywhere in the world.',
+      f1_title: 'Repeater Registration', f1_desc: 'Register repeaters with all technical info: frequency, CTCSS, location, operating mode and more.',
+      f2_title: 'Multiple Callsigns', f2_desc: 'Link more than one callsign to the same repeater. E.g.: PT2AA, PY2RCA in the same system.',
+      f3_title: 'Map Location', f3_desc: 'View the exact location of each repeater on Google Maps, with precise coordinates and coverage radius.',
+      f4_title: 'Telegram Alerts', f4_desc: 'Register your phone number and receive instant Telegram notifications whenever a favorite repeater changes status.',
+      f5_title: 'Favorite Repeaters', f5_desc: 'Mark your most used repeaters as favorites and access them quickly on your personalized dashboard.',
+      f6_title: 'Real-Time Status', f6_desc: 'Update and check the operational status of repeaters. Online, offline or under maintenance — always updated by the community.',
+      cov_label: 'GLOBAL COVERAGE', cov_title: 'Available in 3 languages',
+      cov_desc: 'The platform is available in Portuguese, English and Spanish to serve amateur radio operators from Brazil, the United States, Spain and all of Latin America.',
+      tg_label: 'NOTIFICATIONS', tg_title: 'Instant Telegram alerts',
+      tg_desc: "Never miss a status change. Register your phone number and our Telegram bot will alert you in seconds whenever a favorite repeater goes offline or comes back online.",
+      tg_bot_sub: 'bot · now', tg_alert: '⚠️ STATUS ALERT',
+      tg_msg1: 'Repeater <strong>PT2AA</strong> in Brasília, Brazil is now <strong>OFFLINE</strong>.',
+      tg_msg2: 'Frequency: 145.000 MHz · 2:32 PM', tg_read: 'read ✓✓',
+      map_label: 'COVERAGE', map_title: 'Repeaters around the world',
+      map_desc: 'View the exact location of each registered repeater on the map. Filter by country, frequency or operational status.',
+      map_powered: 'GOOGLE MAPS INTEGRATED',
+      how_label: 'HOW IT WORKS', how_title: 'In 4 simple steps',
+      s1_title: 'Create your account', s1_desc: 'Sign up for free and set up your amateur radio profile.',
+      s2_title: 'Add repeaters', s2_desc: 'Register repeaters with callsigns, frequencies and location.',
+      s3_title: 'Favorite yours', s3_desc: 'Mark the repeaters you use frequently for quick access.',
+      s4_title: 'Enable alerts', s4_desc: 'Connect your Telegram and receive real-time status notifications.',
+      cta_badge: 'FREE ACCESS', cta_title1: 'Ready to connect', cta_title2: 'to the world?',
+      cta_sub: 'Join thousands of amateur radio operators who already use Ham Repeater to manage and monitor repeaters globally.',
+      cta_btn: 'Create Free Account',
+      ft_privacy: 'Privacy', ft_terms: 'Terms', ft_contact: 'Contact',
+    },
+    es: {
+      nav_features: 'Funciones', nav_how: 'Cómo Funciona', nav_map: 'Cobertura', nav_cta: 'Acceder',
+      hero_badge: 'SISTEMA GLOBAL DE REPETIDORAS',
+      hero_sub: 'Registra, gestiona y monitorea repetidoras de radioaficionado en Brasil y en todo el mundo. Sigue el estado en tiempo real, recibe alertas en Telegram y conéctate con la comunidad global.',
+      hero_cta1: 'Empezar Ahora', hero_cta2: 'Saber Más',
+      stat1: 'Repetidoras', stat2: 'Países', stat3: 'Usuarios',
+      mock_fav: '2 FAVORITAS',
+      feat_label: 'FUNCIONES', feat_title: 'Todo lo que necesitas para gestionar repetidoras',
+      feat_desc: 'Una plataforma completa para que los radioaficionados registren, monitoreen y compartan repetidoras en cualquier parte del mundo.',
+      f1_title: 'Registro de Repetidoras', f1_desc: 'Registra repetidoras con toda la información técnica: frecuencia, CTCSS, ubicación, modo de operación y mucho más.',
+      f2_title: 'Múltiples Indicativos', f2_desc: 'Vincula más de un indicativo de llamada a la misma repetidora. Ej: PT2AA, PY2RCA en el mismo sistema.',
+      f3_title: 'Ubicación en el Mapa', f3_desc: 'Consulta la ubicación exacta de cada repetidora en Google Maps, con coordenadas precisas y radio de cobertura.',
+      f4_title: 'Alertas por Telegram', f4_desc: 'Registra tu teléfono y recibe notificaciones instantáneas en Telegram cada vez que una repetidora favorita cambie de estado.',
+      f5_title: 'Repetidoras Favoritas', f5_desc: 'Marca tus repetidoras más usadas como favoritas y accede a ellas rápidamente en tu panel personalizado.',
+      f6_title: 'Estado en Tiempo Real', f6_desc: 'Actualiza y consulta el estado operativo de las repetidoras. En línea, fuera de línea o en mantenimiento — siempre actualizado por la comunidad.',
+      cov_label: 'COBERTURA GLOBAL', cov_title: 'Disponible en 3 idiomas',
+      cov_desc: 'La plataforma está disponible en Portugués, Inglés y Español para atender a radioaficionados de Brasil, Estados Unidos, España y toda América Latina.',
+      tg_label: 'NOTIFICACIONES', tg_title: 'Alertas instantáneas en Telegram',
+      tg_desc: 'No te pierdas ningún cambio de estado. Registra tu número de teléfono y nuestro bot de Telegram te avisará en segundos cuando alguna repetidora favorita se desconecte o vuelva a operar.',
+      tg_bot_sub: 'bot · ahora', tg_alert: '⚠️ ALERTA DE ESTADO',
+      tg_msg1: 'La repetidora <strong>PT2AA</strong> en Brasilia, Brasil está <strong>FUERA DE LÍNEA</strong>.',
+      tg_msg2: 'Frecuencia: 145.000 MHz · 14:32', tg_read: 'leído ✓✓',
+      map_label: 'COBERTURA', map_title: 'Repetidoras en todo el mundo',
+      map_desc: 'Visualiza en el mapa la ubicación exacta de cada repetidora registrada. Filtra por país, frecuencia o estado operativo.',
+      map_powered: 'GOOGLE MAPS INTEGRADO',
+      how_label: 'CÓMO FUNCIONA', how_title: 'En 4 pasos simples',
+      s1_title: 'Crea tu cuenta', s1_desc: 'Regístrate gratis y configura tu perfil de radioaficionado.',
+      s2_title: 'Agrega repetidoras', s2_desc: 'Registra repetidoras con indicativos, frecuencias y ubicación.',
+      s3_title: 'Agrega favoritas', s3_desc: 'Marca las repetidoras que usas frecuentemente para acceso rápido.',
+      s4_title: 'Activa las alertas', s4_desc: 'Conecta tu Telegram y recibe notificaciones de estado en tiempo real.',
+      cta_badge: 'ACCESO GRATUITO', cta_title1: 'Listo para conectar', cta_title2: '¿al mundo?',
+      cta_sub: 'Únete a miles de radioaficionados que ya usan Ham Repeater para gestionar y monitorear repetidoras a nivel global.',
+      cta_btn: 'Crear Cuenta Gratis',
+      ft_privacy: 'Privacidad', ft_terms: 'Términos', ft_contact: 'Contacto',
+    }
+  };
+
+  let currentLang = 'pt';
+
+  function setLang(lang) {
+    currentLang = lang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.lang-btn').forEach(b => {
+      if (b.getAttribute('onclick').includes("'" + lang + "'")) b.classList.add('active');
+    });
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (i18n[lang][key] !== undefined) {
+        el.innerHTML = i18n[lang][key];
+      }
+    });
+    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang === 'es' ? 'es' : 'en';
+  }
+
+  function toggleMenu() {
+    const m = document.getElementById('mobileMenu');
+    m.classList.toggle('open');
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
+</body>
+</html>
